@@ -1,0 +1,24 @@
+{
+  "name": "PulseRTC",
+  "version": "1.0.0",
+  "description": "WebRTC 서버에 AI Hook을 쉽게 붙일 수 있는 플랫폼",
+  "main": "index.js",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "test": "pnpm -r test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.3",
+    "dotenv": "^16.4.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
