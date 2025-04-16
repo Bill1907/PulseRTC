@@ -1,68 +1,80 @@
-# PulseRTC
+# 🎧 PulseRTC
 
-WebRTC 서버에 AI Hook을 쉽게 붙일 수 있는 플랫폼입니다.
+> 다양한 음성 기반 AI 모델(GPT-4o, Claude Sonnet, Gemini 등)을 자유로 선택하여 실시간 대화를 진행하는 WebRTC 기반 오픈 플랫폼
 
-## 프로젝트 구조
+---
+
+## 💡 프로젝트 개요
+
+이 플랫폼은 사용자가 선택한 AI 모델과 음성 기반으로 실시간 대화를 나누어 쓰는 구조로 되어 있습니다.  
+WebRTC를 통해 실시간 음성 데이터를 주고받고, AI 모델은 STT → LLM → TTS의 화름으로 응답을 생성합니다.
+
+### 주요 특징
+
+- ✅ 다양한 AI 모델 연동 (GPT-4o, Claude, Gemini 등)
+- 🎧 실시간 WebRTC 기반 음성 스트림링
+- 🧠 STT → LLM → TTS 화름 자동 연결
+- 🚀 Docker Compose로 간편한 로컬 및 클라우드 실행
+- 🛠️ 완전 모듈화된 구조 (Signaling / Media Gateway / Model Router)
+
+---
+
+## 📦 시스템 구성
 
 ```
-├── packages/
-│   ├── sfu/              # mediasoup 래핑
-│   ├── signaling/        # Fastify + WebSocket
-│   ├── ai-hook/          # FastAPI 서버 (Python)
-│   ├── client-sdk/       # TypeScript 기반 SDK
-│   ├── mobile-sdk/       # Flutter 용
-├── examples/
-│   ├── web-demo/         # React 기반 예제
-│   ├── mobile-demo/      # Flutter 예제
-├── docker/
-│   └── docker-compose.yml
-├── README.md
+[Client SDK]
+    ↓
+[Signaling Server] ← REST API + WebSocket
+    ↓
+[WebRTC Media Gateway]
+    ↓
+[Model Routing Layer] → STT → GPT/Claude/Gemini → TTS
 ```
 
-## 주요 기능
+---
 
-- WebRTC SFU(Selective Forwarding Unit) 구현 (mediasoup 기반)
-- AI 연동을 위한 Hook 시스템
-- 시그널링 서버 (Fastify + WebSocket)
-- 클라이언트 SDK (Web, Mobile)
+## 🛠️ 개발 스텍
 
-## 개발 환경 설정
+| 구성 요소     | 기술 스텍                                            |
+| ------------- | ---------------------------------------------------- |
+| Client SDK    | TypeScript (Flutter / WebRTC)                        |
+| Signaling     | Node.js + Express / WebSocket                        |
+| Media Gateway | mediasoup or ion-sfu (Node or Go)                    |
+| Model Router  | TypeScript + Whisper API + OpenAI/Claude/Gemini APIs |
 
-본 프로젝트는 pnpm 워크스페이스를 사용합니다.
+---
+
+## 🔪 로컬 실행 방법
 
 ```bash
-# 의존성 설치
-pnpm install
-
-# 각 패키지 빌드
-pnpm -r build
-
-# 개발 모드 실행
-pnpm dev
+git clone https://github.com/yourname/webrtc-ai-platform.git
+cd webrtc-ai-platform
+docker-compose up --build
 ```
 
-## 패키지 설명
+- 브라우저에서 http://localhost:3000 접속
+- SDK를 통해 세션 생성 후 WebRTC 연결
+- AI 응답 음성 수습 확인
 
-### packages/sfu
+---
 
-mediasoup을 기반으로 한 WebRTC SFU 구현체입니다. WebRTC 미디어 스트림을 라우팅하고 AI Hook과 연동할 수 있는 기능을 제공합니다.
+## 📁 디렉토리 구성
 
-### packages/signaling
+```
+/client-sdk         # Web or Flutter SDK
+/signaling-server   # REST + WS 세션 관리 서버
+/media-gateway      # WebRTC audio stream 핸들링
+/model-router       # STT → LLM → TTS 라우팅 처리
+/docker-compose.yml # 전체 실행 스크립트
+```
 
-Fastify와 WebSocket을 사용한 시그널링 서버입니다. 클라이언트 간의 연결 설정을 조정합니다.
+---
 
-### packages/ai-hook
+## 📌 협정 계획
 
-Python FastAPI 기반의 AI 서비스 연동 서버입니다. 음성 인식, 번역, 감정 분석 등의 AI 기능을 WebRTC 스트림에 연결합니다.
+- [ ] Whisper 대신 다른 STT 옵션 추가 (Google, Azure 등)
+- [ ] LLM 라우팅 구조 플랫그인화
+- [ ] 실시간 응답 중단 처리 (interrupt)
+- [ ] 텍스트 로그 저장 기능
 
-### packages/client-sdk
-
-브라우저 환경에서 사용할 수 있는 TypeScript 기반 SDK 입니다.
-
-### packages/mobile-sdk
-
-Flutter 기반 모바일 환경을 위한 SDK 입니다.
-
-## 라이센스
-
-ISC
+---
